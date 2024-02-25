@@ -33,7 +33,7 @@ export const login = asyncHandler(async (req, res) => {
         const refreshToken = jwt.sign({ _id: user._id }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d'})
 
         res.cookie('token', refreshToken, {
-            httpOnly: true, secure: false
+            httpOnly: true, secure: true 
         })
         res.status(200).json({ user: data, token: accessToken })
     } catch(error) {
