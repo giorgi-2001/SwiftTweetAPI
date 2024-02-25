@@ -44,7 +44,7 @@ const server = app.listen(PORT,
     console.log(`Server started on port - ${PORT}\nConnected to MongoDB`))
 
 const io = new Server(server, {
-    cors: 'http://localhost:5173',
+    cors: 'https://swifttweet.onrender.com',
 })
 
 let activeUsers = []

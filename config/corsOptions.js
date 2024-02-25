@@ -1,7 +1,7 @@
 
 const corsOptions = {
     origin: [
-        "http://localhost:5173"
+        "https://swifttweet.onrender.com"
     ],
     credentials: true
 }
