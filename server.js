@@ -1,8 +1,7 @@
 import express from 'express'
-import dotenv from 'dotenv'
+import dotenv from 'dotenv/config'
 import mongoose from 'mongoose'
 import cors from 'cors'
-import cookieParser from 'cookie-parser'
 import userRoutes from './routes/userRoutes.js'
 import messageRoutes from './routes/messageRoutes.js'
 import chatRoutes from './routes/chatRoutes.js'
@@ -11,16 +10,12 @@ import notificationRoutes from './routes/NotificationRoutes.js'
 import corsOptions from './config/corsOptions.js'
 import { Server } from 'socket.io'
 
-dotenv.config()
-
 const PORT = process.env.PORT || 3500
 
 
 const app = express()
 
 app.use(cors(corsOptions))
-
-app.use(cookieParser())
 
 app.use(express.json())
 
@@ -31,7 +26,7 @@ app.use((req, res, next) => {
 
 app.use('/user', userRoutes)
 
-app.use('/message', messageRoutes) 
+app.use('/message', messageRoutes)
 
 app.use('/chat', chatRoutes)
 
@@ -40,7 +35,7 @@ app.use('/auth', authRoutes)
 app.use('/notif', notificationRoutes)
 
 
-const server = app.listen(PORT, 
+const server = app.listen(PORT,
     console.log(`Server started on port - ${PORT}\nConnected to MongoDB`))
 
 const io = new Server(server, {
@@ -59,12 +54,12 @@ io.on('connection', (socket) => {
         io.emit('activeUsers', activeUsers)
     }),
 
-    socket.on('logout', (user) => {
-        console.log(`User ${user.username} has disconnected`)
-        socket.leave(user._id)
-        activeUsers = activeUsers.filter(us => us._id !== user._id)
-        io.emit('activeUsers', activeUsers)
-    })
+        socket.on('logout', (user) => {
+            console.log(`User ${user.username} has disconnected`)
+            socket.leave(user._id)
+            activeUsers = activeUsers.filter(us => us._id !== user._id)
+            io.emit('activeUsers', activeUsers)
+        })
 
     socket.on('disconnect', () => {
         activeUsers = activeUsers.filter(us => us.socketId !== socket.id)
@@ -98,7 +93,7 @@ io.on('connection', (socket) => {
             sender, notification, chatId
         })
     })
-    
+
 })
 
 mongoose.connect(process.env.MONGO_URI).then(() => {
